@@ -1,0 +1,36 @@
+name: Publish NuGet Package on Release
+
+on:
+  push:
+    tags:
+      - v* 
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        VERSION="${GITHUB_REF#refs/tags/v}"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Build the project
+      run: dotnet build --configuration Release /p:Version=${{ env.VERSION }}
+
+    - name: Pack the NuGet package
+      run: dotnet pack --configuration Release /p:PackageVersion=${{ env.VERSION }} --output ./artifacts
+
+    - name: Publish to GitHub NuGet
+      run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.PAT_TOKEN }}
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
