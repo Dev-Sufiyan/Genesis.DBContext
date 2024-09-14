@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genesis.DBContext", "Genesis.DBContext.csproj", "{A2048ED1-0D0A-4BB9-99F0-55EA0292EEDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genesis.DBContext", "Genesis.DBContext\Genesis.DBContext.csproj", "{DDEB35E0-9DD0-42D1-989B-315D9DCE5663}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A2048ED1-0D0A-4BB9-99F0-55EA0292EEDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A2048ED1-0D0A-4BB9-99F0-55EA0292EEDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A2048ED1-0D0A-4BB9-99F0-55EA0292EEDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A2048ED1-0D0A-4BB9-99F0-55EA0292EEDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDEB35E0-9DD0-42D1-989B-315D9DCE5663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEB35E0-9DD0-42D1-989B-315D9DCE5663}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDEB35E0-9DD0-42D1-989B-315D9DCE5663}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDEB35E0-9DD0-42D1-989B-315D9DCE5663}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
