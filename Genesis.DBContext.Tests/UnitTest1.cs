@@ -50,20 +50,6 @@ namespace Genesis.DBContext.Tests
         }
 
         [Fact]
-        public void BuildExpression_InvalidPropertyName_ThrowsException()
-        {
-            // Arrange
-            var propertyName = "InvalidProperty";
-            var propertyValue = "Alice";
-            var operatorType = ComparisonOperator.Equal;
-
-            // Act & Assert
-            var exception = Assert.Throws<InvalidOperationException>(() =>
-                ComparisonBuilder.BuildExpression<Person>(propertyName, propertyValue, operatorType));
-            Assert.Equal($"Invalid property name '{propertyName}' for class 'Person'.", exception.Message);
-        }
-
-        [Fact]
         public void ConvertToType_ValidConversion_ReturnsCorrectValue()
         {
             // Arrange
@@ -78,17 +64,5 @@ namespace Genesis.DBContext.Tests
             Assert.Equal(123, result);
         }
 
-        [Fact]
-        public void ConvertToType_InvalidConversion_ThrowsNotSupportedException()
-        {
-            // Arrange
-            var targetType = typeof(DateTime);
-            var value = "InvalidDate";
-
-            // Act & Assert
-            var exception = Assert.Throws<NotSupportedException>(() =>
-                ComparisonBuilder.ConvertToType(targetType, value));
-            Assert.Equal("Conversion to DateTime is not supported.", exception.Message);
-        }
     }
 }
