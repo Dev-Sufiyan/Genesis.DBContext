@@ -1,11 +1,13 @@
-﻿using System.Linq.Expressions;
+﻿using Genesis.Models.Enums;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Metadata;
 
-namespace Genesis.DBContext.Extesnsions
+namespace Genesis.DBContext.Expressions
 {
-    public static class CreateExpression
+    public static class ComparisonBuilder
     {
-        private static Expression<Func<T, bool>> CreateFilter<T>(string propertyName, string StrPropertyValue)
+        public static Expression<Func<T, bool>> BuildExpression<T>(string propertyName, string StrPropertyValue, ComparisonOperator comOperator)
         {
             var parameter = Expression.Parameter(typeof(T), "x");
 
@@ -16,10 +18,23 @@ namespace Genesis.DBContext.Extesnsions
             var expLeft = Expression.MakeMemberAccess(parameter, property);
             var propertyValue = ConvertToType(propertyType, StrPropertyValue);
             var expRight = Expression.Constant(propertyValue, propertyType);
-            var equals = Expression.Equal(expLeft, expRight);
 
-            return Expression.Lambda<Func<T, bool>>(equals, parameter);
+            Expression comparison = comOperator switch
+            {
+                ComparisonOperator.Equal => Expression.Equal(expLeft, expRight),
+                ComparisonOperator.NotEqual => Expression.NotEqual(expLeft, expRight),
+                ComparisonOperator.GreaterThan => Expression.GreaterThan(expLeft, expRight),
+                ComparisonOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(expLeft, expRight),
+                ComparisonOperator.LessThan => Expression.LessThan(expLeft, expRight),
+                ComparisonOperator.LessThanOrEqual => Expression.LessThanOrEqual(expLeft, expRight),
+                ComparisonOperator.StartsWith => (propertyType == typeof(string)
+                               ? Expression.Call(expLeft, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }) ?? throw new Exception(), expRight)
+                               : throw new InvalidOperationException("StartsWith operator is only valid for string properties.")),
+                _ => throw new NotImplementedException($"Comparison operator '{comOperator}' is not implemented.")
+            };
+            return Expression.Lambda<Func<T, bool>>(comparison, parameter);
         }
+
 
         public static object ConvertToType(Type targetType, string value)
         {
