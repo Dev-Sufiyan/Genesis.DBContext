@@ -17,7 +17,14 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    
+
+    - name: Configure NuGet to use GitHub Packages
+      run: |
+          dotnet nuget add source https://nuget.pkg.github.com/Dev-Sufiyan/index.json \
+          --name github \
+          --username Dev-Sufiyan \
+          --password ${{ secrets.PACKAGES_READ_TOKEN }}
+          
     - name: Restore dependencies
       run: dotnet restore
     
