@@ -21,7 +21,7 @@ jobs:
     - name: Configure NuGet to use GitHub Packages
       run: |
           dotnet nuget add source https://nuget.pkg.github.com/Dev-Sufiyan/index.json \
-          --name github \
+          --name dev-sufiyan \
           --username Dev-Sufiyan \
           --password ${{ secrets.PACKAGES_READ_TOKEN }}
           
