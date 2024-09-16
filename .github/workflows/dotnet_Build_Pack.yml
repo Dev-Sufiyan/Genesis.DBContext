@@ -38,5 +38,5 @@ jobs:
     - name: Build for Pack
       run: dotnet build --configuration Release --no-restore
       
-    - name: NuGet pack Genesis.DBContext Proj
+    - name: NuGet Pack Check
       run: dotnet pack Genesis.DBContext/Genesis.DBContext.csproj --configuration Release /p:PackageVersion=0.0.0-PRCheck --output ./artifacts

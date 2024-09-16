@@ -18,6 +18,14 @@ jobs:
       with:
         dotnet-version: '8.x'
 
+    - name: Configure NuGet to use GitHub Packages
+      run: |
+          dotnet nuget add source https://nuget.pkg.github.com/Dev-Sufiyan/index.json \
+          --name github \
+          --username Dev-Sufiyan \
+          --password ${{ secrets.PACKAGES_READ_TOKEN }} \
+          --store-password-in-clear-text
+
     - name: Extract version from tag
       id: get_version
       run: |
