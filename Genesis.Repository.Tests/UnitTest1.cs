@@ -105,11 +105,11 @@ namespace Genesis.Repository.Tests
         {
             var searchParams = new List<SearchParam>
             {
-                new SearchParam { Field = nameof(TestModel.StringField), Value = "Hello", Comparator = ComparisonOperator.StartsWith }
+                new SearchParam { Field = nameof(TestModel.StringField), Value = "John", Comparator = ComparisonOperator.StartsWith }
             };
 
             var expression = ComparisonBuilder.BuildExpression<TestModel>(searchParams);
-            var expectedExpression = CreateLambdaExpression<TestModel>(x => x.StringField.StartsWith("Hello"));
+            var expectedExpression = CreateLambdaExpression<TestModel>(x => x.StringField.StartsWith("John"));
 
             Assert.True(ExpressionsAreEqual(expression, expectedExpression));
         }
@@ -120,11 +120,11 @@ namespace Genesis.Repository.Tests
             var searchParams = new List<SearchParam>
             {
                 new SearchParam { Field = nameof(TestModel.IntField), Value = 16.ToString(), Comparator = ComparisonOperator.Equal },
-                new SearchParam { Field = nameof(TestModel.StringField), Value = "Hello", Comparator = ComparisonOperator.StartsWith }
+                new SearchParam { Field = nameof(TestModel.StringField), Value = "John", Comparator = ComparisonOperator.StartsWith }
             };
 
             var expression = ComparisonBuilder.BuildExpression<TestModel>(searchParams);
-            var expectedExpression = CreateLambdaExpression<TestModel>(x => x.IntField == 16 && x.StringField.StartsWith("Hello"));
+            var expectedExpression = CreateLambdaExpression<TestModel>(x => x.IntField == 16 && x.StringField.StartsWith("John"));
 
             Assert.True(ExpressionsAreEqual(expression, expectedExpression));
         }
