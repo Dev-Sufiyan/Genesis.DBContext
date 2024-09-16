@@ -39,4 +39,4 @@ jobs:
       run: dotnet build --configuration Release --no-restore
       
     - name: NuGet Pack Check
-      run: dotnet pack Genesis.DBContext/Genesis.DBContext.csproj --configuration Release /p:PackageVersion=0.0.0-PRCheck --output ./artifacts
+      run: dotnet pack Genesis.Repository/Genesis.Repository.csproj --configuration Release /p:PackageVersion=0.0.0-PRCheck --output ./artifacts

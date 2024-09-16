@@ -1,25 +1,55 @@
-﻿using Genesis.Models.Enums;
+﻿using Genesis.Models.DTO;
+using Genesis.Models.Enums;
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Metadata;
 
-namespace Genesis.DBContext.Expressions
+namespace Genesis.Repository.Expressions
 {
     public static class ComparisonBuilder
     {
-        public static Expression<Func<T, bool>> BuildExpression<T>(string propertyName, string StrPropertyValue, ComparisonOperator comOperator)
+        public static Expression<Func<T, bool>> BuildExpression<T>(List<SearchParam> searchParam)
+        {
+            if (searchParam == null || searchParam.Count == 0)
+            {
+                return x => true;
+            }
+
+            var initialExpression = BuildExpression<T>(searchParam[0]);
+            var parameter = Expression.Parameter(typeof(T), "x");
+
+            foreach (var searchObj in searchParam.Skip(1))
+            {
+                var newExpression = BuildExpression<T>(searchParam);
+                initialExpression = CombineExpressions(initialExpression, newExpression, Expression.AndAlso);
+            }
+            return Expression.Lambda<Func<T, bool>>(initialExpression, parameter);
+
+        }
+
+        private static Expression<Func<T, bool>> CombineExpressions<T>(Expression<Func<T, bool>> left, Expression<Func<T, bool>> right, Func<Expression, Expression, BinaryExpression> combine)
+        {
+            var leftBody = left.Body;
+            var rightBody = right.Body;
+            var parameter = left.Parameters[0];
+
+            var combinedBody = combine(leftBody, rightBody);
+            return Expression.Lambda<Func<T, bool>>(combinedBody, parameter);
+        }
+
+        public static Expression<Func<T, bool>> BuildExpression<T>(SearchParam searchParam)
         {
             var parameter = Expression.Parameter(typeof(T), "x");
 
-            var property = typeof(T).GetProperty(propertyName);
-            if (property == null) throw new InvalidDataException($"Invalid property name {propertyName} for class {typeof(T).Name}");
+            var property = typeof(T).GetProperty(searchParam.Field);
+            if (property == null) throw new InvalidDataException($"Invalid property name {searchParam.Field} for class {typeof(T).Name}");
             var propertyType = property.PropertyType;
 
             var expLeft = Expression.MakeMemberAccess(parameter, property);
-            var propertyValue = ConvertToType(propertyType, StrPropertyValue);
+            var propertyValue = ConvertToType(propertyType, searchParam.Value);
             var expRight = Expression.Constant(propertyValue, propertyType);
 
-            Expression comparison = comOperator switch
+            Expression comparison = searchParam.Comparator switch
             {
                 ComparisonOperator.Equal => Expression.Equal(expLeft, expRight),
                 ComparisonOperator.NotEqual => Expression.NotEqual(expLeft, expRight),
@@ -30,7 +60,7 @@ namespace Genesis.DBContext.Expressions
                 ComparisonOperator.StartsWith => (propertyType == typeof(string)
                                ? Expression.Call(expLeft, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }) ?? throw new Exception(), expRight)
                                : throw new InvalidOperationException("StartsWith operator is only valid for string properties.")),
-                _ => throw new NotImplementedException($"Comparison operator '{comOperator}' is not implemented.")
+                _ => throw new NotImplementedException($"Comparison operator '{searchParam.Comparator}' is not implemented.")
             };
             return Expression.Lambda<Func<T, bool>>(comparison, parameter);
         }

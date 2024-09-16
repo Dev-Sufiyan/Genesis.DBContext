@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Genesis.DBContext\Genesis.DBContext.csproj" />
+    <ProjectReference Include="..\Genesis.Repository\Genesis.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

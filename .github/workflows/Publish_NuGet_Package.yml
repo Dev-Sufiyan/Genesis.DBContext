@@ -36,7 +36,7 @@ jobs:
       run: dotnet build --configuration Release /p:Version=${{ env.VERSION }}
 
     - name: Pack the NuGet package
-      run: dotnet pack Genesis.DBContext/Genesis.DBContext.csproj --configuration Release /p:PackageVersion=${{ env.VERSION }} --output ./artifacts
+      run: dotnet pack Genesis.Repository/Genesis.Repository.csproj --configuration Release /p:PackageVersion=${{ env.VERSION }} --output ./artifacts
 
     - name: Publish to GitHub NuGet
       run: dotnet nuget push "./artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.PAT_TOKEN }}

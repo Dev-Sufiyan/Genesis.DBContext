@@ -1,10 +1,10 @@
 using Genesis.Models.Enums;
-using Genesis.DBContext.Expressions;
+using Genesis.Repository.Expressions;
 using System;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace Genesis.DBContext.Tests
+namespace Genesis.Repository.Tests
 {
     public class ComparisonBuilderTests
     {
