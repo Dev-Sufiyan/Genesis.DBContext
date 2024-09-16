@@ -20,10 +20,10 @@ namespace Genesis.Repository.Expressions
 
             foreach (var searchObj in searchParam.Skip(1))
             {
-                var newExpression = BuildExpression<T>(searchParam);
+                var newExpression = BuildExpression<T>(searchObj);
                 initialExpression = CombineExpressions(initialExpression, newExpression, Expression.AndAlso);
             }
-            return Expression.Lambda<Func<T, bool>>(initialExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(initialExpression.Body, parameter);
 
         }
 
@@ -69,6 +69,17 @@ namespace Genesis.Repository.Expressions
         public static object ConvertToType(Type targetType, string value)
         {
             if (targetType == typeof(string)) return value;
+
+            if (targetType == typeof(DateTime))
+            {
+                //Move this to AppSettings ---
+                var dateFormat = "dd-MM-yyyy";
+                if (DateTime.TryParseExact(value, dateFormat, null, System.Globalization.DateTimeStyles.None, out var dateTimeValue))
+                {
+                    return dateTimeValue;
+                }
+                throw new FormatException($"Unable to parse '{value}' as a DateTime with format '{dateFormat}'.");
+            }
 
             var parseMethod = targetType.GetMethod("Parse", new[] { typeof(string) });
 

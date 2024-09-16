@@ -14,5 +14,6 @@ namespace Genesis.Repository.Tests
         public DateTime DateTimeField { get; set; }
         public bool BoolField { get; set; }
         public double DoubleField { get; set; }
+        public decimal DecimalField { get; set; }
     }
 }
