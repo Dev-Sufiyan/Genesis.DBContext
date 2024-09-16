@@ -30,13 +30,13 @@ jobs:
       run: dotnet restore
     
     - name: Build for Test
-      run: dotnet build Genesis.DBContext/Genesis.DBContext.csproj --configuration Debug
+      run: dotnet build --configuration Debug
     
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
     - name: Build for Pack
-      run: dotnet build Genesis.DBContext/Genesis.DBContext.csproj --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore
       
     - name: NuGet pack Genesis.DBContext Proj
       run: dotnet pack Genesis.DBContext/Genesis.DBContext.csproj --configuration Release /p:PackageVersion=0.0.0-PRCheck --output ./artifacts
