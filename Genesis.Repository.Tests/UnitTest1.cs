@@ -1,4 +1,5 @@
 using Genesis.Models.Enums;
+using Genesis.Models.DTO;
 using Genesis.Repository.Expressions;
 using Genesis.Repository.Tests;
 using System;
