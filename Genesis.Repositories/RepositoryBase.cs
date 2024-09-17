@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Genesis.Repository.Expressions;
+using Genesis.Repositories.Expressions;
 using System.Linq.Expressions;
 using Genesis.Models.DTO;
 using System.Reflection;
 
-namespace Genesis.Repository
+namespace Genesis.Repositories
 {
-    public class RepositoryBase<T> : IRepositoryBase<T> where T : class
+    public class RepositoriesBase<T> : IRepositoriesBase<T> where T : class
     {
         protected readonly DbContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public RepositoryBase(DbContext context)
+        public RepositoriesBase(DbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

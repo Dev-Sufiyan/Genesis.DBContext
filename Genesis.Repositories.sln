@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genesis.Repository", "Genesis.Repository\Genesis.Repository.csproj", "{F19E3E8C-F1BC-4317-A629-89974E04C9FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genesis.Repositories", "Genesis.Repositories\Genesis.Repositories.csproj", "{F19E3E8C-F1BC-4317-A629-89974E04C9FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genesis.Repository.Tests", "Genesis.Repository.Tests\Genesis.Repository.Tests.csproj", "{95573379-38EE-4265-AF71-1287EB7ABFC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Genesis.Repositories.Tests", "Genesis.Repositories.Tests\Genesis.Repositories.Tests.csproj", "{95573379-38EE-4265-AF71-1287EB7ABFC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

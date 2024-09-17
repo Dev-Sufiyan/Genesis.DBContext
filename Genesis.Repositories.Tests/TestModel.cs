@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Genesis.Repository.Tests
+namespace Genesis.Repositories.Tests
 {
     public class TestModel
     {

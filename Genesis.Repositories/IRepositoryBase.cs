@@ -1,8 +1,8 @@
 ﻿using Genesis.Models.DTO;
 
-namespace Genesis.Repository
+namespace Genesis.Repositories
 {
-    public interface IRepositoryBase<T> where T : class
+    public interface IRepositoriesBase<T> where T : class
     {
         Task<IEnumerable<T>> GetRecordsAsync(List<SearchParam> searchParams);
         Task<T> GetByPKAsync(object keyValue);

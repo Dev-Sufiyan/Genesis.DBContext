@@ -4,7 +4,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Genesis.Repository.Expressions
+namespace Genesis.Repositories.Expressions
 {
     public static class ComparisonBuilder
     {

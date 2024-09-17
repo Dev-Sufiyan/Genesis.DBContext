@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Genie.Counter.DBContext;
+namespace Genesis.Repositories;
 public class GenDBContext : DbContext
 {
     public GenDBContext(DbContextOptions<GenDBContext> options) : base(options) { }

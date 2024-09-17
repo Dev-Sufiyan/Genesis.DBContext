@@ -1,9 +1,9 @@
 using Genesis.Models.Enums;
 using Genesis.Models.DTO;
-using Genesis.Repository.Expressions;
+using Genesis.Repositories.Expressions;
 using System.Linq.Expressions;
 
-namespace Genesis.Repository.Tests
+namespace Genesis.Repositories.Tests
 {
     public class ComparisonBuilderTests
     {

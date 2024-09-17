@@ -4,10 +4,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageId>Genesis.Repository</PackageId>
+		<PackageId>Genesis.Repositories</PackageId>
 		<Authors>Mohmad Sufiyan</Authors>
-		<Description>Base template to create NuGet packages</Description>
-		<RepositoryUrl>https://github.com/Dev-Sufiyan/Genesis.Repository</RepositoryUrl>
+		<Description>Library that contain Generic DB Operation</Description>
+		<RepositoryUrl>https://github.com/Dev-Sufiyan/Genesis.Repositories</RepositoryUrl>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Genesis.Models" Version="1.0.0" />
