@@ -8,10 +8,10 @@ namespace Genesis.Repositories
 {
     public class RepositoriesBase<T> : IRepositoriesBase<T> where T : class
     {
-        protected readonly DbContext _context;
+        protected readonly IDbContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public RepositoriesBase(DbContext context)
+        public RepositoriesBase(IDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
@@ -53,11 +53,12 @@ namespace Genesis.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-            if (!await IsEntityExistAsync(entity))
+            var existingEntity = await _dbSet.FindAsync(GetPKValues(entity));
+            if (existingEntity == null)
             {
                 throw new InvalidOperationException("Entity not found to update.");
             }
-            _context.Update(entity);
+            _context.Update(existingEntity, entity);
             await _context.SaveChangesAsync();
         }
 
@@ -81,20 +82,13 @@ namespace Genesis.Repositories
         }
         private object GetPKValues(T entity)
         {
-            var keyProperty = GetPKProperty();
+            var keyProperty = _context.GetPrimaryKeyProperty<T>();
             if (keyProperty == null)
             {
                 throw new InvalidOperationException("No key property defined for the entity.");
             }
 
             return keyProperty.GetValue(entity) ?? throw new InvalidOperationException("Invalid property defined for the entity.");
-        }
-
-        private PropertyInfo GetPKProperty()
-        {
-            var keyProperties = _context.Model.FindEntityType(typeof(T))?.FindPrimaryKey()?.Properties;
-            return keyProperties?.FirstOrDefault()?.PropertyInfo
-                ?? throw new InvalidOperationException("No key property defined for the entity.");
         }
     }
 }
