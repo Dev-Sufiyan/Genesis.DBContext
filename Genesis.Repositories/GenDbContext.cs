@@ -3,6 +3,10 @@
 namespace Genesis.Repositories;
 public class GenDBContext : DbContext
 {
-    public GenDBContext(DbContextOptions<GenDBContext> options) : base(options) { }
+    public GenDBContext(DbContextOptions options) : base(options) { }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
 }
