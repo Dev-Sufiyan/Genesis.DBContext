@@ -1,6 +1,5 @@
 ﻿using Genesis.Models.DTO;
 using Genesis.Models.Enums;
-using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -16,18 +15,21 @@ namespace Genesis.Repositories.Expressions
             }
 
             var initialExpression = BuildExpression<T>(searchParam[0]);
-            var parameter = Expression.Parameter(typeof(T), "x");
+            var parameter = initialExpression.Parameters[0];
 
             foreach (var searchObj in searchParam.Skip(1))
             {
                 var newExpression = BuildExpression<T>(searchObj);
                 initialExpression = CombineExpressions(initialExpression, newExpression, Expression.AndAlso);
             }
-            return Expression.Lambda<Func<T, bool>>(initialExpression.Body, parameter);
 
+            return initialExpression;
         }
 
-        private static Expression<Func<T, bool>> CombineExpressions<T>(Expression<Func<T, bool>> left, Expression<Func<T, bool>> right, Func<Expression, Expression, BinaryExpression> combine)
+        private static Expression<Func<T, bool>> CombineExpressions<T>(
+            Expression<Func<T, bool>> left,
+            Expression<Func<T, bool>> right,
+            Func<Expression, Expression, BinaryExpression> combine)
         {
             var leftBody = left.Body;
             var rightBody = right.Body;
@@ -42,7 +44,9 @@ namespace Genesis.Repositories.Expressions
             var parameter = Expression.Parameter(typeof(T), "x");
 
             var property = typeof(T).GetProperty(searchParam.Field);
-            if (property == null) throw new InvalidDataException($"Invalid property name {searchParam.Field} for class {typeof(T).Name}");
+            if (property == null)
+                throw new InvalidDataException($"Invalid property name {searchParam.Field} for class {typeof(T).Name}");
+
             var propertyType = property.PropertyType;
 
             var expLeft = Expression.MakeMemberAccess(parameter, property);
@@ -57,14 +61,14 @@ namespace Genesis.Repositories.Expressions
                 ComparisonOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(expLeft, expRight),
                 ComparisonOperator.LessThan => Expression.LessThan(expLeft, expRight),
                 ComparisonOperator.LessThanOrEqual => Expression.LessThanOrEqual(expLeft, expRight),
-                ComparisonOperator.StartsWith => (propertyType == typeof(string)
-                               ? Expression.Call(expLeft, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }) ?? throw new Exception(), expRight)
-                               : throw new InvalidOperationException("StartsWith operator is only valid for string properties.")),
+                ComparisonOperator.StartsWith => propertyType == typeof(string)
+                               ? Expression.Call(expLeft, typeof(string).GetMethod("StartsWith", new[] { typeof(string) }) ?? throw new InvalidOperationException("StartsWith method not found"), expRight)
+                               : throw new InvalidOperationException("StartsWith operator is only valid for string properties."),
                 _ => throw new NotImplementedException($"Comparison operator '{searchParam.Comparator}' is not implemented.")
             };
+
             return Expression.Lambda<Func<T, bool>>(comparison, parameter);
         }
-
 
         public static object ConvertToType(Type targetType, string value)
         {
@@ -72,7 +76,6 @@ namespace Genesis.Repositories.Expressions
 
             if (targetType == typeof(DateTime))
             {
-                //Move this to AppSettings ---
                 var dateFormat = "dd-MM-yyyy";
                 if (DateTime.TryParseExact(value, dateFormat, null, System.Globalization.DateTimeStyles.None, out var dateTimeValue))
                 {
@@ -98,7 +101,7 @@ namespace Genesis.Repositories.Expressions
             throw new NotSupportedException($"Conversion to {targetType.Name} is not supported.");
         }
 
-        public static InvalidOperationException InvalidOperationException(string tagetType, Exception? ex = null) => new InvalidOperationException($"Error converting value to {tagetType}.", ex);
-
+        public static InvalidOperationException InvalidOperationException(string targetType, Exception? ex = null)
+            => new InvalidOperationException($"Error converting value to {targetType}.", ex);
     }
 }
