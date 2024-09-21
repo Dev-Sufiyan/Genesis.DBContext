@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Genesis.Repositories.Expressions;
-using System.Linq.Expressions;
 using Genesis.Models.DTO;
-using System.Reflection;
+using Genesis.Repositories.Extensions;
 
 namespace Genesis.Repositories
 {
@@ -17,10 +15,9 @@ namespace Genesis.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetRecordsAsync(List<SearchParam> searchParams)
+        public async Task<IEnumerable<T>> GetRecordsAsync(SearchParams searchParams)
         {
-            Expression<Func<T, bool>> expression = ComparisonBuilder.BuildExpression<T>(searchParams);
-            return await _dbSet.Where(expression).ToListAsync();
+            return await _dbSet.AsQueryable().AddSearchParams(searchParams).ToListAsync();
         }
 
         public async Task<T> GetByPKAsync(object keyValue)

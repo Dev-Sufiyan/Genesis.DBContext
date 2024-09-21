@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Genesis.Repositories.Expressions
 {
-    public class OrderByBuilder
+    public static class OrderByBuilder
     {
         public static Expression<Func<T, object>> BuildExpression<T>(string fieldName)
         {
